@@ -658,7 +658,11 @@
       <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           <div>
-            <h5 class="font-['Pacifico'] text-xl md:text-2xl text-primary mb-4">logo</h5>
+           <img
+              src="logo.jpg"
+              alt="شعار مؤسسة عاصي"
+              class="h-16 object-contain mb-2"
+            />
             <p class="text-gray-300 text-sm md:text-base lang-ar">
               مؤسسة عاصي - شريكك في النجاح والتميز
             </p>
@@ -955,17 +959,18 @@
         });
 
         mobileNavItems.forEach(item => {
-           const button = item.querySelector(".lang-ar, .lang-en ,button");
-            const dropdown = item.querySelector(".mobile-dropdown");
-
-            button.addEventListener("click", (e) =>{
-                  // منع الانتقال للصفحة إذا كان هناك قائمة فرعية
+    item.addEventListener("click", (e) => {
+        const dropdown = item.querySelector(".mobile-dropdown");
+        
+        // التحقق من أن القائمة الفرعية موجودة قبل محاولة إظهارها
+        if (dropdown) {
             e.preventDefault(); 
-                dropdown.classList.toggle("show");
-            
-            });
-        });
+            dropdown.classList.toggle("show");
+        }
+    });
+});
       });
     </script>
   </body>
 </html>
+
