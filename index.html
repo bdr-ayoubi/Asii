@@ -147,13 +147,23 @@
         text-align: center;
       }
       .splash-logo {
-        width: 250px;
+        width: 150px; /* حجم أصغر للجوال */
         animation: splashZoomOut 1.5s forwards;
       }
+      @media (min-width: 768px) {
+        .splash-logo {
+          width: 250px; /* حجم أكبر للكمبيوتر */
+        }
+      }
       .splash-slogan {
-        font-size: 3rem;
+        font-size: 2rem; /* حجم أصغر للجوال */
         color: #64748b;
         animation: splashZoomOut 1.5s forwards;
+      }
+      @media (min-width: 768px) {
+        .splash-slogan {
+          font-size: 3rem; /* حجم أكبر للكمبيوتر */
+        }
       }
       @keyframes splashZoomOut {
         0% { transform: scale(1); }
@@ -172,6 +182,16 @@
       .page-content.visible {
         opacity: 1;
       }
+
+      /* Mobile dropdown styles */
+      .mobile-dropdown {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+      .mobile-dropdown.show {
+        max-height: 200px; /* يمكن تعديل القيمة حسب عدد الروابط */
+      }
     </style>
   </head>
   <body class="bg-white text-gray-800">
@@ -183,7 +203,7 @@
     </div>
     <header class="w-full bg-gradient-to-b from-gray-50 to-white py-8">
       <div class="container mx-auto px-4">
-        <div class="flex justify-end mb-6">
+        <div class="flex justify-between items-center md:hidden mb-6">
           <div class="language-toggle">
             <button
               id="lang-btn"
@@ -208,20 +228,51 @@
               </button>
             </div>
           </div>
+          <button id="mobile-menu-button" class="text-primary text-3xl">
+            <i class="ri-menu-3-line"></i>
+          </button>
         </div>
+
+        <div class="hidden md:flex justify-end mb-6">
+          <div class="language-toggle">
+            <button
+              id="lang-btn-desktop"
+              class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-button hover:bg-blue-800 transition-colors whitespace-nowrap"
+            >
+              <i class="ri-global-line"></i>
+              <span id="current-lang-text-desktop">العربية</span>
+              <i class="ri-arrow-down-s-line"></i>
+            </button>
+            <div class="language-dropdown min-w-32">
+              <button
+                class="lang-option block w-full text-right px-4 py-2 hover:bg-gray-50 text-gray-700"
+                data-lang="ar"
+              >
+                العربية
+              </button>
+              <button
+                class="lang-option block w-full text-right px-4 py-2 hover:bg-gray-50 text-gray-700"
+                data-lang="en"
+              >
+                English
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="text-center">
           <div class="zoom-animation mb-4">
             <img
               src="logo.jpg"
               alt="شعار مؤسسة عاصي"
-              class="mx-auto h-24 object-contain mb-2"
+              class="mx-auto h-16 md:h-24 object-contain mb-2"
             />
-            <p class="text-2xl font-bold text-secondary">Yes We Can</p>
+            <p class="text-xl md:text-2xl font-bold text-secondary">Yes We Can</p>
           </div>
         </div>
       </div>
     </header>
-    <section class="w-full h-96 carousel-container bg-gray-100">
+    <section class="w-full h-48 md:h-96 carousel-container bg-gray-100">
       <div class="carousel-slide active">
         <div
           class="w-full h-full bg-cover bg-center"
@@ -268,8 +319,8 @@
       </div>
     </section>
     <nav class="w-full bg-white shadow-lg border-t border-gray-200">
-      <div class="container mx-auto px-4">
-        <ul class="flex justify-center items-center gap-8 py-4">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <ul id="desktop-nav" class="hidden md:flex justify-center items-center gap-8 py-4 w-full">
           <li class="nav-item relative">
             <button
               class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:text-primary transition-colors font-semibold whitespace-nowrap lang-ar"
@@ -413,73 +464,130 @@
             </a>
           </li>
         </ul>
+        <div id="mobile-menu" class="hidden absolute top-0 right-0 h-screen w-64 bg-white shadow-xl z-50 p-4 transition-transform transform translate-x-full">
+          <div class="flex justify-end mb-8">
+            <button id="close-mobile-menu" class="text-gray-600 text-3xl">
+              <i class="ri-close-line"></i>
+            </button>
+          </div>
+          <ul class="flex flex-col gap-4">
+            <li class="mobile-nav-item">
+              <button class="flex justify-between items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">
+                <span>من نحن</span>
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+              <button class="flex justify-between items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">
+                <span>Who are we</span>
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+              <ul class="mobile-dropdown bg-gray-50 mt-2 rounded-lg">
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">غاياتنا</a></li>
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">The general goal</a></li>
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">الأهداف</a></li>
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">The goals</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">كلمة المدير العام</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">The General Manager's Word</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">الهيكلية الإدارية</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">The administrative structure</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">الشركاء الاستراتيجيون</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">Strategic Partners</a>
+            </li>
+            <li class="mobile-nav-item">
+              <button class="flex justify-between items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">
+                <span>أعمالنا</span>
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+              <button class="flex justify-between items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">
+                <span>Our works</span>
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+              <ul class="mobile-dropdown bg-gray-50 mt-2 rounded-lg">
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">فعاليات</a></li>
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">Events</a></li>
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">مشاريع</a></li>
+                <li><a href="#" class="block px-6 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">Projects</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-ar">تواصل معنا</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded lang-en" style="display: none;">Contact Us</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
     <main class="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <section class="py-16">
+      <section class="py-8 md:py-16">
         <div class="container mx-auto px-4 text-center">
-          <h2 class="text-4xl font-bold text-primary mb-6 lang-ar">
+          <h2 class="text-2xl md:text-4xl font-bold text-primary mb-6 lang-ar">
             مرحباً بكم في مؤسسة عاصي
           </h2>
           <h2
-            class="text-4xl font-bold text-primary mb-6 lang-en"
+            class="text-2xl md:text-4xl font-bold text-primary mb-6 lang-en"
             style="display: none"
           >
             Welcome to Assi Foundation
           </h2>
 
           <p
-            class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed lang-ar"
+            class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed lang-ar"
           >
             نحن مؤسسة رائدة في مجال الأعمال والخدمات المتميزة، نسعى لتحقيق
             التميز والابتكار في كل ما نقوم به. مع فريق من الخبراء المتخصصين،
             نقدم حلولاً متكاملة تلبي احتياجات عملائنا وتحقق أهدافهم.
           </p>
           <p
-            class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed lang-en"
+            class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed lang-en"
             style="display: none"
           >
             We are a leading institution in the field of business...
           </p>
         </div>
       </section>
-      <section class="py-16 bg-white">
+      <section class="py-8 md:py-16 bg-white">
         <div class="container mx-auto px-4">
           <h3
-            class="text-3xl font-bold text-center text-primary mb-12 lang-ar"
+            class="text-xl md:text-3xl font-bold text-center text-primary mb-8 md:mb-12 lang-ar"
           >
             خدماتنا المتميزة
           </h3>
           <h3
-            class="text-3xl font-bold text-center text-primary mb-12 lang-en"
+            class="text-xl md:text-3xl font-bold text-center text-primary mb-8 md:mb-12 lang-en"
             style="display: none"
           >
             Our exceptional services
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             <div
-              class="bg-gray-50 rounded-lg p-8 text-center hover:shadow-lg transition-shadow"
+              class="bg-gray-50 rounded-lg p-6 md:p-8 text-center hover:shadow-lg transition-shadow"
             >
               <div
-                class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6"
+                class="w-12 h-12 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6"
               >
-                <i class="ri-briefcase-line text-white text-2xl"></i>
+                <i class="ri-briefcase-line text-white text-xl md:text-2xl"></i>
               </div>
-              <h4 class="text-xl font-bold text-gray-800 mb-4 lang-ar">
+              <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 lang-ar">
                 الاستشارات المهنية
               </h4>
               <h4
-                class="text-xl font-bold text-gray-800 mb-4 lang-en"
+                class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 lang-en"
                 style="display: none"
               >
                 Professional Consultations
               </h4>
-              <p class="text-gray-600 lang-ar">
+              <p class="text-sm md:text-base text-gray-600 lang-ar">
                 نقدم استشارات متخصصة في مختلف المجالات لمساعدة عملائنا على اتخاذ
                 القرارات الصحيحة
               </p>
               <p
-                class="text-gray-600 lang-en"
+                class="text-sm md:text-base text-gray-600 lang-en"
                 style="display: none"
               >
                 We provide specialized consulting in various fields to help our
@@ -487,27 +595,27 @@
               </p>
             </div>
             <div
-              class="bg-gray-50 rounded-lg p-8 text-center hover:shadow-lg transition-shadow"
+              class="bg-gray-50 rounded-lg p-6 md:p-8 text-center hover:shadow-lg transition-shadow"
             >
               <div
-                class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6"
+                class="w-12 h-12 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6"
               >
-                <i class="ri-team-line text-white text-2xl"></i>
+                <i class="ri-team-line text-white text-xl md:text-2xl"></i>
               </div>
-              <h4 class="text-xl font-bold text-gray-800 mb-4 lang-ar">
+              <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 lang-ar">
                 إدارة المشاريع
               </h4>
               <h4
-                class="text-xl font-bold text-gray-800 mb-4 lang-en"
+                class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 lang-en"
                 style="display: none"
               >
                 project management
               </h4>
-              <p class="text-gray-600 lang-ar">
+              <p class="text-sm md:text-base text-gray-600 lang-ar">
                 فريق متخصص في إدارة وتنفيذ المشاريع بأعلى معايير الجودة والكفاءة
               </p>
               <p
-                class="text-gray-600 lang-en"
+                class="text-sm md:text-base text-gray-600 lang-en"
                 style="display: none"
               >
                 A team specialized in managing and implementing projects with the
@@ -515,27 +623,27 @@
               </p>
             </div>
             <div
-              class="bg-gray-50 rounded-lg p-8 text-center hover:shadow-lg transition-shadow"
+              class="bg-gray-50 rounded-lg p-6 md:p-8 text-center hover:shadow-lg transition-shadow"
             >
               <div
-                class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6"
+                class="w-12 h-12 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6"
               >
-                <i class="ri-lightbulb-line text-white text-2xl"></i>
+                <i class="ri-lightbulb-line text-white text-xl md:text-2xl"></i>
               </div>
-              <h4 class="text-xl font-bold text-gray-800 mb-4 lang-ar">
+              <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 lang-ar">
                 الحلول الابتكارية
               </h4>
               <h4
-                class="text-xl font-bold text-gray-800 mb-4 lang-en"
+                class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 lang-en"
                 style="display: none"
               >
                 Innovative solutions
               </h4>
-              <p class="text-gray-600 lang-ar">
+              <p class="text-sm md:text-base text-gray-600 lang-ar">
                 نبتكر حلولاً عملية ومبدعة تواكب التطورات الحديثة في السوق
               </p>
               <p
-                class="text-gray-600 lang-en"
+                class="text-sm md:text-base text-gray-600 lang-en"
                 style="display: none"
               >
                 We create practical and creative solutions that keep pace with
@@ -546,26 +654,22 @@
         </div>
       </section>
     </main>
-    <footer class="bg-gray-800 text-white py-12">
+    <footer class="bg-gray-800 text-white py-8 md:py-12">
       <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           <div>
-           <img
-              src="logo.jpg"
-              alt="شعار مؤسسة عاصي"
-              class="h-12 object-contain mb-2"
-            />
-            <p class="text-gray-300 lang-ar">
+            <h5 class="font-['Pacifico'] text-xl md:text-2xl text-primary mb-4">logo</h5>
+            <p class="text-gray-300 text-sm md:text-base lang-ar">
               مؤسسة عاصي - شريكك في النجاح والتميز
             </p>
-            <p class="text-gray-300 lang-en" style="display: none">
+            <p class="text-gray-300 text-sm md:text-base lang-en" style="display: none">
               Asi Foundation - Your partner in success and excellence
             </p>
           </div>
           <div>
-            <h6 class="font-bold text-lg mb-4 lang-ar">روابط سريعة</h6>
+            <h6 class="font-bold text-base md:text-lg mb-4 lang-ar">روابط سريعة</h6>
             <h6
-              class="font-bold text-lg mb-4 lang-en"
+              class="font-bold text-base md:text-lg mb-4 lang-en"
               style="display: none"
             >
               Quick Links
@@ -613,9 +717,9 @@
             </ul>
           </div>
           <div>
-            <h6 class="font-bold text-lg mb-4 lang-ar">تابعنا</h6>
+            <h6 class="font-bold text-base md:text-lg mb-4 lang-ar">تابعنا</h6>
             <h6
-              class="font-bold text-lg mb-4 lang-en"
+              class="font-bold text-base md:text-lg mb-4 lang-en"
               style="display: none"
             >
               Follow us
@@ -623,30 +727,30 @@
             <div class="flex gap-4">
               <a
                 href="#"
-                class="w-10 h-10 bg-primary rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
               >
                 <i class="ri-facebook-fill text-white"></i>
               </a>
               <a
                 href="#"
-                class="w-10 h-10 bg-primary rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
               >
                 <i class="ri-twitter-fill text-white"></i>
               </a>
               <a
                 href="#"
-                class="w-10 h-10 bg-primary rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
               >
                 <i class="ri-linkedin-fill text-white"></i>
               </a>
             </div>
           </div>
         </div>
-        <div class="border-t border-gray-700 mt-8 pt-8 text-center">
-          <p class="text-gray-400 lang-ar">
+        <div class="border-t border-gray-700 mt-6 md:mt-8 pt-6 md:pt-8 text-center">
+          <p class="text-gray-400 text-sm lang-ar">
             &copy; 2025 مؤسسة عاصي. جميع الحقوق محفوظة.
           </p>
-          <p class="text-gray-400 lang-en" style="display: none">
+          <p class="text-gray-400 text-sm lang-en" style="display: none">
             &copy; 2025 Asi Foundation. All rights reserved.
           </p>
         </div>
@@ -742,7 +846,7 @@
         });
         setInterval(nextSlide, 5000);
 
-        // --- 3. Dropdown Menu Logic ---
+        // --- 3. Dropdown Menu Logic (Desktop) ---
         const navItems = document.querySelectorAll(".nav-item");
         navItems.forEach((item) => {
           const button = item.querySelector("button");
@@ -763,18 +867,21 @@
         // --- 4. Language Switcher Logic ---
         const langOptions = document.querySelectorAll(".lang-option");
         const currentLangText = document.getElementById("current-lang-text");
+        const currentLangTextDesktop = document.getElementById("current-lang-text-desktop");
         const allArElements = document.querySelectorAll(".lang-ar");
         const allEnElements = document.querySelectorAll(".lang-en");
 
         function setLanguage(lang) {
           if (lang === "en") {
             document.documentElement.setAttribute("dir", "ltr");
-            currentLangText.textContent = "English";
+            if(currentLangText) currentLangText.textContent = "English";
+            if(currentLangTextDesktop) currentLangTextDesktop.textContent = "English";
             allArElements.forEach((el) => (el.style.display = "none"));
             allEnElements.forEach((el) => (el.style.display = "block"));
           } else {
             document.documentElement.setAttribute("dir", "rtl");
-            currentLangText.textContent = "العربية";
+            if(currentLangText) currentLangText.textContent = "العربية";
+            if(currentLangTextDesktop) currentLangTextDesktop.textContent = "العربية";
             allEnElements.forEach((el) => (el.style.display = "none"));
             allArElements.forEach((el) => (el.style.display = "block"));
           }
@@ -794,23 +901,27 @@
         const musicIcon = toggleButton.querySelector("i");
         let isPlaying = false;
 
-        // تعيين مستوى الصوت إلى 25% فورًا
-        music.volume = 0.01;
+        function setMusicVolume() {
+          if (window.innerWidth < 768) {
+            music.volume = 0.40;
+          } else {
+            music.volume = 0.35;
+          }
+        }
+        
+        setMusicVolume();
 
-        // تشغيل الموسيقى عند أول تفاعل
         document.body.addEventListener('click', () => {
-            if (!isPlaying) {
-                music.play().then(() => {
-                    isPlaying = true;
-                    musicIcon.className = 'ri-volume-up-line';
-                }).catch(error => {
-                    console.log('Autoplay was prevented.');
-                    // إذا فشل التشغيل التلقائي، لا تغير الحالة
-                });
-            }
+          if (!isPlaying) {
+            music.play().then(() => {
+              isPlaying = true;
+              musicIcon.className = 'ri-volume-up-line';
+            }).catch(error => {
+              console.log('Autoplay was prevented.');
+            });
+          }
         }, { once: true });
 
-        // زر التشغيل والإيقاف
         toggleButton.addEventListener("click", () => {
           if (isPlaying) {
             music.pause();
@@ -818,14 +929,43 @@
           } else {
             music.play().then(() => {
               musicIcon.className = 'ri-volume-up-line';
-            }).catch(error => {
-                // إذا فشل التشغيل عند النقر، لا تغير الحالة
-            });
+            }).catch(error => {});
           }
           isPlaying = !isPlaying;
+        });
+
+        // --- 6. Mobile Menu Logic ---
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const closeMobileMenuButton = document.getElementById("close-mobile-menu");
+        const mobileNavItems = document.querySelectorAll(".mobile-nav-item");
+
+        mobileMenuButton.addEventListener("click", () => {
+          mobileMenu.classList.remove("hidden");
+          setTimeout(() => {
+            mobileMenu.classList.remove("translate-x-full");
+          }, 10);
+        });
+
+        closeMobileMenuButton.addEventListener("click", () => {
+          mobileMenu.classList.add("translate-x-full");
+          setTimeout(() => {
+            mobileMenu.classList.add("hidden");
+          }, 300);
+        });
+
+        mobileNavItems.forEach(item => {
+           const button = item.querySelector(".lang-ar, .lang-en ,button");
+            const dropdown = item.querySelector(".mobile-dropdown");
+
+            button.addEventListener("click", (e) =>{
+                  // منع الانتقال للصفحة إذا كان هناك قائمة فرعية
+            e.preventDefault(); 
+                dropdown.classList.toggle("show");
+            
+            });
         });
       });
     </script>
   </body>
-
 </html>
